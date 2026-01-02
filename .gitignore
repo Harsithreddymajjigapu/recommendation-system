@@ -1,0 +1,12 @@
+# Virtual Environments
+mario2/
+rec/
+venv/
+env/
+
+# Python Cache (Junk files)
+__pycache__/
+*.pyc
+
+# Model files (Too big for Git)
+*.pkl
