@@ -1,0 +1,1 @@
+connection_string = "mongodb+srv://majjigapuharsithreddy_db_user:<db_password>@data.ya5e90s.mongodb.net/?appName=data"
