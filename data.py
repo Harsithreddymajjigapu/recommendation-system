@@ -3,10 +3,11 @@ import os
 from pymongo import MongoClient
 load_dotenv(find_dotenv())
 password = os.environ.get("MONGOO_PWB")
-connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:{password}@data.ya5e90s.mongodb.net/"
+connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:XzaxXuZBdOFMVlYn@data.ya5e90s.mongodb.net/"
 client = MongoClient(connection_string)
 db = client.recommendation_project
 projects_collection = db.projects
+
 def insert_projects_with_loop():
     project_names = [
         "AI Customer Support Chatbot",
@@ -25,6 +26,7 @@ def insert_projects_with_loop():
         "Machine Learning Image Classifier",
         "Real-time Chat App"
     ]
+
     skills_list = [
         ["Python", "NLP", "TensorFlow", "MongoDB"],
         ["HTML", "CSS", "JavaScript", "React"],
@@ -42,6 +44,7 @@ def insert_projects_with_loop():
         ["Python", "PyTorch", "OpenCV", "Deep Learning"],
         ["JavaScript", "Socket.io", "Node.js", "HTML"]
     ]
+
     docs_to_insert = []
     for name, skills in zip(project_names, skills_list):
         project_document = {
@@ -49,6 +52,11 @@ def insert_projects_with_loop():
             "skills": skills
         }
         docs_to_insert.append(project_document)
+
+    projects_collection.delete_many({}) 
+    result = projects_collection.insert_many(docs_to_insert)
+    print(f"Success! Inserted {len(result.inserted_ids)} projects into the database.")
+
 if __name__ == "__main__":
     insert_projects_with_loop()
 
