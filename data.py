@@ -55,7 +55,7 @@ def insert_projects_with_loop():
 
     projects_collection.delete_many({}) 
     result = projects_collection.insert_many(docs_to_insert)
-    print(f"Success! Inserted {len(result.inserted_ids)} projects into the database.")
+    print(f"Success! Inserted {len(result.inserted_ids)} projects into the database")
 
 if __name__ == "__main__":
     insert_projects_with_loop()

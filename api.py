@@ -27,6 +27,22 @@ def get_recommendations(user_skills: str):
         }
     all_projects = list(db.projects.find({}, {"_id": 0}))
     recommendations = []
+    for project in all_projects:
+        project_skills = project.get("skills", [])
+        score = calculate_percentage(user_skills, project_skills)
+        if score > 0:
+            recommendations.append({
+                "project_name": project['name'],
+                "match_score": f"{score*100:.1f}%", # Convert 0.75 -> "75.0%"
+                "matching_skills": list(set(user_skills).intersection(set(project_skills)))
+            })
+    recommendations.sort(key=lambda x: float(x['match_score'].strip('%')), reverse=True)
+    
+    return {
+        "user": user_name,
+        "user_skills": user_skills,
+        "recommended_projects": recommendations
+    }
 
 
 
