@@ -13,9 +13,12 @@ client = MongoClient(connection_string)
 
 db = client.recommendation_project
 
+@app.get("/")
 def Home():
     return {"message": "Server is running! Go to /docs to test the API."}
-def get_recommendations(user_skills: str):
+
+@app.get("/recommend/{user_name}")
+def get_recommendations(user_name: str):
     user=db.users.find_one({"name":user_name})
     if not user:
         raise HTTPException(status_code=404, detail=f"User '{user_name}' not found.")

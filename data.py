@@ -7,6 +7,7 @@ connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:XzaxXuZBdOFMVl
 client = MongoClient(connection_string)
 db = client.recommendation_project
 projects_collection = db.projects
+user_collection = db.users
 
 def insert_projects_with_loop():
     project_names = [
@@ -56,6 +57,21 @@ def insert_projects_with_loop():
     projects_collection.delete_many({}) 
     result = projects_collection.insert_many(docs_to_insert)
     print(f"Success! Inserted {len(result.inserted_ids)} projects into the database")
+
+    users_to_insert = [
+        {
+            "name": "Harsith Developer",
+            "skills": ["Python", "MongoDB", "Data Science", "SQL"]
+        },
+        {
+            "name": "Harsith Frontend",
+            "skills": ["HTML", "CSS", "JavaScript", "React"]
+        }
+    ]
+
+    user_collection.delete_many({})
+    user_collection.insert_many(users_to_insert)
+    print(f"✅ Success! Inserted {len(users_to_insert)} users (including Harsith).")
 
 if __name__ == "__main__":
     insert_projects_with_loop()
