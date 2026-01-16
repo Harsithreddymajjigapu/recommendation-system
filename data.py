@@ -3,7 +3,7 @@ import os
 from pymongo import MongoClient
 load_dotenv(find_dotenv())
 password = os.environ.get("MONGOO_PWB")
-connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:XzaxXuZBdOFMVlYn@data.ya5e90s.mongodb.net/"
+connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:{password}@data.ya5e90s.mongodb.net/"
 client = MongoClient(connection_string)
 db = client.recommendation_project
 projects_collection = db.projects
