@@ -21,7 +21,7 @@ if st.button("Find Matches 🔍", type="primary"):
                 if response.status_code == 200:
                     data = response.json()
                     
-                    st.success(f"✅ Analyzing for: **{', '.join(data['input_skills'])}**")
+                    st.success(f"✅ Analyzing for: **{', '.join(data['user_skills'])}**")
                     st.markdown("---")
                     
                     if not data['recommended_projects']:
