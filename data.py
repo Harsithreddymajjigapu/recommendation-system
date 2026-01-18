@@ -1,6 +1,7 @@
 from dotenv import load_dotenv, find_dotenv
 import os
 from pymongo import MongoClient
+import certifi
 load_dotenv(find_dotenv())
 password = os.environ.get("MONGOO_PWB")
 connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:{password}@data.ya5e90s.mongodb.net/"
