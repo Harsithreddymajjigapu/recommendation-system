@@ -2,65 +2,61 @@ from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 import os
-import certifi  # Needed for the SSL fix
+import certifi
 
-# Import your logic function
-from logic import calculate_percentage
-
-# 1. SETUP - This must happen BEFORE any @app functions
 app = FastAPI()
 
 load_dotenv(find_dotenv())
 password = os.environ.get("MONGOO_PWB")
 
-# Database Connection
 connection_string = f"mongodb+srv://majjigapuharsithreddy_db_user:{password}@data.ya5e90s.mongodb.net/"
 client = MongoClient(connection_string, tlsCAFile=certifi.where())
 db = client.recommendation_project
 
-# 2. ROUTES
 @app.get("/")
 def Home():
-    return {"message": "Server is running! Go to /docs to test the API."}
+    return {"message": "Server is running!"}
 
-# Route A: Recommend by Name (The one we built first)
 @app.get("/recommend/{user_name}")
 def get_recommendations(user_name: str):
     user = db.users.find_one({"name": user_name})
     if not user:
-        raise HTTPException(status_code=404, detail=f"User '{user_name}' not found.")
-    
-    user_skills = user.get("skills", [])
-    
-    # Re-use the helper function below to avoid duplicate code
-    return find_projects_for_skills(user_skills, user_name)
+        raise HTTPException(status_code=404, detail="User not found")
+    return find_projects_for_skills(user.get("skills", []), user_name)
 
-# Route B: Recommend by Skills (The NEW one you wanted)
 @app.get("/recommend_by_skills/{skills_text}")
 def recommend_by_skills(skills_text: str):
-    # Convert "Python, sql" -> ["Python", "SQL"]
     user_skills = [s.strip().title() for s in skills_text.split(',')]
-    
     if not user_skills:
          return {"message": "No skills provided."}
-
-    # Use the same logic helper
     return find_projects_for_skills(user_skills, "Guest User")
 
-# 3. LOGIC HELPER (Keeps code clean)
 def find_projects_for_skills(user_skills, user_display_name):
     all_projects = list(db.projects.find({}, {"_id": 0}))
     recommendations = []
 
+    
+    user_skills_lower = set(s.lower() for s in user_skills)
+
     for project in all_projects:
         project_skills = project.get("skills", [])
-        score = calculate_percentage(user_skills, project_skills)
+        
+        project_skills_lower = set(s.lower() for s in project_skills)
+        
+        intersection = user_skills_lower.intersection(project_skills_lower)
+        
+        if len(project_skills_lower) > 0:
+            score = len(intersection) / len(project_skills_lower)
+        else:
+            score = 0
         
         if score > 0:
+            display_matches = [ps for ps in project_skills if ps.lower() in user_skills_lower]
+            
             recommendations.append({
                 "project_name": project['name'],
                 "match_score": f"{score*100:.1f}%", 
-                "matching_skills": list(set(user_skills).intersection(set(project_skills)))
+                "matching_skills": display_matches
             })
 
     recommendations.sort(key=lambda x: float(x['match_score'].strip('%')), reverse=True)
