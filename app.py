@@ -6,15 +6,12 @@ st.set_page_config(page_title="Skill Matcher AI", page_icon="🤖")
 st.title("🤖 AI Project Recommender")
 st.markdown("Type your skills below to find the perfect project match.")
 
-# 1. NEW INPUT: Ask for skills directly
-skills_input = st.text_input("✍️ Enter your skills (comma separated):", placeholder="e.g. Python, React, SQL")
+skills_input = st.text_input("Enter your skills (comma separated):", placeholder="e.g. Python, React, SQL")
 
 if st.button("Find Matches 🔍", type="primary"):
     if skills_input:
         with st.spinner("Analyzing your skills..."):
             try:
-                # 2. CALL THE NEW API ENDPOINT
-                # We send the text directly: /recommend_by_skills/Python,SQL
                 api_url = f"http://127.0.0.1:8000/recommend_by_skills/{skills_input}"
                 response = requests.get(api_url)
 
