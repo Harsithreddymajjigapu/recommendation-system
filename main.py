@@ -60,7 +60,6 @@ def find_projects_for_skills(user_skills, user_display_name):
             })
 
     recommendations.sort(key=lambda x: float(x['match_score'].strip('%')), reverse=True)
-    
     return {
         "user": user_display_name,
         "user_skills": user_skills,

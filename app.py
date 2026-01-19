@@ -18,19 +18,19 @@ if st.button("Find Matches 🔍", type="primary"):
                 if response.status_code == 200:
                     data = response.json()
                     
-                    st.success(f"✅ Analyzing for: **{', '.join(data['user_skills'])}**")
+                    st.success(f" Analyzing for: **{', '.join(data['user_skills'])}**")
                     st.markdown("---")
                     
                     if not data['recommended_projects']:
                         st.warning("No matching projects found. Try adding more skills!")
                     else:
-                        st.subheader(f"🎯 Top Recommended Projects")
+                        st.subheader(f" Top Recommended Projects")
                         
                         for project in data['recommended_projects']:
                             score_text = project['match_score']
                             score_float = float(score_text.strip('%')) / 100
                             
-                            with st.expander(f"📌 {project['project_name']} ({score_text} Match)", expanded=True):
+                            with st.expander(f" {project['project_name']} ({score_text} Match)", expanded=True):
                                 col1, col2 = st.columns([3, 1])
                                 with col1:
                                     st.write(f"**Matches:** {', '.join(project['matching_skills'])}")
@@ -41,6 +41,6 @@ if st.button("Find Matches 🔍", type="primary"):
                     st.error("Error communicating with the backend.")
 
             except requests.exceptions.ConnectionError:
-                st.error("❌ Could not connect to the Server. Is uvicorn running?")
+                st.error(" Could not connect to the Server. Is uvicorn running?")
     else:
-        st.warning("⚠️ Please type some skills first.")
+        st.warning(" Please type some skills first.")
