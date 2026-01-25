@@ -17,13 +17,6 @@ db = client.recommendation_project
 def Home():
     return {"message": "Server is running!"}
 
-@app.get("/recommend/{user_name}")
-def get_recommendations(user_name: str):
-    user = db.users.find_one({"name": user_name})
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return find_projects_for_skills(user.get("skills", []), user_name)
-
 @app.get("/recommend_by_skills/{skills_text}")
 def recommend_by_skills(skills_text: str):
     user_skills = [s.strip().title() for s in skills_text.split(',')]
